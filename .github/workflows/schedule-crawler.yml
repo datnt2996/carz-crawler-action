@@ -1,0 +1,21 @@
+name: Project Carz Schedule Crawler data
+on:
+  schedule:
+    - cron: 0 0 * * 6 # Runs at 12 AM (midnight) every Saturday
+    # - cron: '* * * * *' # Runs every minute
+
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Fill reason here!!!!!!"
+        required: false
+
+jobs:
+  crawler:
+    runs-on: [self-hosted, Linux, seal]
+    steps:
+      - name: Clone repository
+        run: |
+          git clone git@github.com:LibertyCarz/nestjs-carz-crawler.git
+        env:
+          GIT_AUTH_TOKEN: ${{ secrets.GIT_TOKEN }}
