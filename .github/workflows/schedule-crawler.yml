@@ -20,3 +20,28 @@ jobs:
           repository: "LibertyCarz/nestjs-carz-crawler"
           token: ${{ secrets.GH_TOKEN }}
           ref: "main"
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm install --force
+      - name: Init env
+        env:
+          PORT: ${{vars.PORT}}
+          MONGODB_URL: ${{vars.MONGODB_URL}}
+          MONGO_DB_NAME: ${{vars.MONGO_DB_NAME}}
+          RABBITMQ_CRAWLER_QUEUE: ${{vars.RABBITMQ_CRAWLER_QUEUE}}
+          RABBITMQ_URL: ${{vars.RABBITMQ_URL}}
+        run: |
+          echo "PORT=$PORT" >> .env
+          echo "MONGODB_URL=$MONGODB_URL" >> .env
+          echo "MONGO_DB_NAME=$MONGO_DB_NAME" >> .env
+          echo "RABBITMQ_CRAWLER_QUEUE=$RABBITMQ_CRAWLER_QUEUE" >> .env
+          echo "RABBITMQ_URL=$RABBITMQ_URL" >> .env
+      - name: Run app and crawl data
+        env:
+          PORT: ${{vars.PORT}}
+        run: |
+          npm run start
+          curl -X GET http://localhost:$PORT/api/crawler
