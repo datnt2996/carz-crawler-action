@@ -12,7 +12,7 @@ on:
 
 jobs:
   crawler:
-    runs-on: [self-hosted, Linux, seal]
+    runs-on: ubuntu-latest
     steps:
       - name: Clone repository
         run: |
