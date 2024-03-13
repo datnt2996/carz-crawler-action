@@ -17,5 +17,5 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v3
         with:
-          repository: "LibertyCarz/rn-carz-customer"
+          repository: "LibertyCarz/nestjs-carz-crawler"
           token: ${{ secrets.GIT_TOKEN }}
