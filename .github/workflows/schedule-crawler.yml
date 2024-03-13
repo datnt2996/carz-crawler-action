@@ -19,3 +19,4 @@ jobs:
         with:
           repository: "LibertyCarz/nestjs-carz-crawler"
           token: ${{ secrets.GIT_TOKEN }}
+          ref: "main"
