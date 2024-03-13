@@ -39,9 +39,13 @@ jobs:
           echo "MONGO_DB_NAME=$MONGO_DB_NAME" >> .env
           echo "RABBITMQ_CRAWLER_QUEUE=$RABBITMQ_CRAWLER_QUEUE" >> .env
           echo "RABBITMQ_URL=$RABBITMQ_URL" >> .env
+      - name: Build NestJS application
+        run: npm run build
+      - name: Start NestJS application
+        run: npm run start:prod
+
       - name: Run app and crawl data
         env:
           PORT: ${{vars.PORT}}
         run: |
-          npm run start > /dev/null 2>&1 &
           curl -X GET http://localhost:$PORT/api/crawler
