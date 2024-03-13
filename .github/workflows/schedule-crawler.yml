@@ -43,10 +43,8 @@ jobs:
         run: npm run build
       - name: Start NestJS application
         run: npm run start:prod &
-
       - name: Wait for npm start to start
-        run: sleep 30
-
+        run: sleep 10
       - name: Run app and crawl data
         env:
           PORT: ${{vars.PORT}}
