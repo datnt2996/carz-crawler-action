@@ -18,5 +18,5 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: "LibertyCarz/nestjs-carz-crawler"
-          token: ${{ secrets.GIT_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
           ref: "main"
