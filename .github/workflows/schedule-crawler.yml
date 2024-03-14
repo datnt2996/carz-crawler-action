@@ -45,16 +45,18 @@ jobs:
         run: npm run start:prod &
       - name: Wait for npm start to start
         run: sleep 10
-      - name: Run app and crawl data
-        env:
-          PORT: ${{vars.PORT}}
-        run: |
-          curl -X GET http://localhost:$PORT/api/write-to-csv
-
-      - name: Wait for write file
-        run: sleep 10
+      # - name: Run app and crawl data
+      #   env:
+      #     PORT: ${{vars.PORT}}
+      #   run: |
+      #     curl -X GET http://localhost:$PORT/api/write-to-csv
+      # - name: Wait for write file
+      #   run: sleep 10
       - name: Push changes
         run: |
+          git rm cars-data-crawler.csv
+          touch cars-data-crawler.csv
+          echo 'ok' > cars-data-crawler.csv
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git add cars-data-crawler.csv
