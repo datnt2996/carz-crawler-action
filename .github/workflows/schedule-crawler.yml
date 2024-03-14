@@ -54,7 +54,7 @@ jobs:
         run: sleep 20
       - name: Push changes
         run: |
-          du -h cars-data-crawler.csv
+          du -h ./cars-data-crawler.csv
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git pull origin main 
