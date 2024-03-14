@@ -50,6 +50,9 @@ jobs:
           PORT: ${{vars.PORT}}
         run: |
           curl -X GET http://localhost:$PORT/api/write-to-csv
+
+      - name: Wait for write file
+        run: sleep 10
       - name: Push changes
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
