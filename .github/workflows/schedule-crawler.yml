@@ -14,7 +14,7 @@ permissions:
   actions: write
 jobs:
   crawler:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Clone repository
         uses: actions/checkout@v3
