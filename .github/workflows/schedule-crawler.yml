@@ -57,7 +57,6 @@ jobs:
 
       - name: Push changes
         run: |
-          ls
           du -h ./cars-data-crawler.csv
           cat ./cars-data-crawler.csv
           cat ./app.log
