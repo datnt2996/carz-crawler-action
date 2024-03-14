@@ -11,6 +11,7 @@ on:
         required: false
 permissions:
   contents: write
+  actions: write
 jobs:
   crawler:
     runs-on: ubuntu-latest
