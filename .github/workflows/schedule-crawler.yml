@@ -45,13 +45,14 @@ jobs:
         run: npm run build
       - name: Start NestJS application
         run: sudo node dist/main &
+      - name: Wait for npm start to start
+        run: sleep 10
       - name: Run app and crawl data
         env:
           PORT: ${{vars.PORT}}
         run: |
           curl -X GET http://localhost:$PORT/api/write-to-csv
-      - name: Wait for write file
-        run: sleep 5
+
       - name: Push changes
         run: |
           ls
