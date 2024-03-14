@@ -9,7 +9,8 @@ on:
       reason:
         description: "Fill reason here!!!!!!"
         required: false
-
+permissions:
+  contents: write
 jobs:
   crawler:
     runs-on: ubuntu-latest
