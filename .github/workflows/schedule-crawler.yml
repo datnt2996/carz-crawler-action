@@ -59,4 +59,4 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git add cars-data-crawler.csv
           git commit -m "Update data"
-          git push
+          git push origin/main
