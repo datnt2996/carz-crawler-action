@@ -28,38 +28,37 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: npm install --force
-      - name: Init env
-        env:
-          PORT: ${{vars.PORT}}
-          MONGODB_URL: ${{vars.MONGODB_URL}}
-          MONGO_DB_NAME: ${{vars.MONGO_DB_NAME}}
-          RABBITMQ_CRAWLER_QUEUE: ${{vars.RABBITMQ_CRAWLER_QUEUE}}
-          RABBITMQ_URL: ${{vars.RABBITMQ_URL}}
-        run: |
-          echo "PORT=$PORT" >> .env
-          echo "MONGODB_URL=$MONGODB_URL" >> .env
-          echo "MONGO_DB_NAME=$MONGO_DB_NAME" >> .env
-          echo "RABBITMQ_CRAWLER_QUEUE=$RABBITMQ_CRAWLER_QUEUE" >> .env
-          echo "RABBITMQ_URL=$RABBITMQ_URL" >> .env
-      - name: Build NestJS application
-        run: npm run build
+      # - name: Init env
+      #   env:
+      #     PORT: ${{vars.PORT}}
+      #     MONGODB_URL: ${{vars.MONGODB_URL}}
+      #     MONGO_DB_NAME: ${{vars.MONGO_DB_NAME}}
+      #     RABBITMQ_CRAWLER_QUEUE: ${{vars.RABBITMQ_CRAWLER_QUEUE}}
+      #     RABBITMQ_URL: ${{vars.RABBITMQ_URL}}
+      #   run: |
+      #     echo "PORT=$PORT" >> .env
+      #     echo "MONGODB_URL=$MONGODB_URL" >> .env
+      #     echo "MONGO_DB_NAME=$MONGO_DB_NAME" >> .env
+      #     echo "RABBITMQ_CRAWLER_QUEUE=$RABBITMQ_CRAWLER_QUEUE" >> .env
+      #     echo "RABBITMQ_URL=$RABBITMQ_URL" >> .env
+      # - name: Build NestJS application
+      #   run: npm run build
       - name: Start NestJS application
         run: |
           sudo chmod -R 777 .
-          node dist/main & > ./app.log
-      - name: Wait for npm start to start
-        run: sleep 10
-      - name: Run app and crawl data
-        env:
-          PORT: ${{vars.PORT}}
-        run: |
-          curl -X GET http://localhost:$PORT/api/write-to-csv
+          node crawl.js
+      # - name: Wait for npm start to start
+      #   run: sleep 10
+      # - name: Run app and crawl data
+      #   env:
+      #     PORT: ${{vars.PORT}}
+      #   run: |
+      #     curl -X GET http://localhost:$PORT/api/write-to-csv
 
       - name: Push changes
         run: |
           du -h ./cars-data-crawler.csv
           cat ./cars-data-crawler.csv
-          cat ./app.log
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git add ./cars-data-crawler.csv
