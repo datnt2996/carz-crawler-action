@@ -54,11 +54,11 @@ jobs:
         run: sleep 20
       - name: Push changes
         run: |
-          git status
           du -h cars-data-crawler.csv
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git pull origin main 
-          git add cars-data-crawler.csv
+          git status
+          git add .
           git commit -m "save crawl data"
           git push origin main
