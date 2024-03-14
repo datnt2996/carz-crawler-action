@@ -44,7 +44,9 @@ jobs:
       - name: Build NestJS application
         run: npm run build
       - name: Start NestJS application
-        run: sudo node dist/main &
+        run: |
+          sudo chmod -R 777 .
+          node dist/main &
       - name: Wait for npm start to start
         run: sleep 10
       - name: Run app and crawl data
@@ -61,6 +63,6 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git status
-          git add .
+          git add ./cars-data-crawler.csv
           git commit -m "save crawl data"
           git push origin main
