@@ -45,7 +45,6 @@ jobs:
       #   run: npm run build
       - name: Start NestJS application
         run: |
-          sudo chmod -R 777 .
           node crawl.js
       # - name: Wait for npm start to start
       #   run: sleep 10
@@ -59,6 +58,7 @@ jobs:
         run: |
           du -h ./cars-data-crawler.csv
           cat ./cars-data-crawler.csv
+          curl https://www.khmer24.com/en/c-cars-and-vehicles?per_page=1
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git add ./cars-data-crawler.csv
