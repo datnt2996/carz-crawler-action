@@ -45,11 +45,11 @@ jobs:
         run: npm run start:prod &
       - name: Wait for npm start to start
         run: sleep 10
-      - name: Run app and crawl data
-        env:
-          PORT: ${{vars.PORT}}
-        run: |
-          curl -X GET http://localhost:$PORT/api/write-to-csv
+      # - name: Run app and crawl data
+      #   env:
+      #     PORT: ${{vars.PORT}}
+      #   run: |
+      #     curl -X GET http://localhost:$PORT/api/write-to-csv
       - name: Push changes
         run: |
           touch cars-data-crawler.csv
