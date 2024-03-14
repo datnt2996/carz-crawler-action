@@ -49,4 +49,4 @@ jobs:
         env:
           PORT: ${{vars.PORT}}
         run: |
-          curl -X GET http://localhost:$PORT/api/crawler
+          curl -X GET http://localhost:$PORT/api/write-csv
