@@ -61,8 +61,8 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git add ./${{ matrix.os.chunk }}.cars-data-crawler.csv
-          git commit -m "save crawl data"
-          git push origin main
+          git commit -m "save crawl data" > /dev/null 2>&1 || echo "No changes to commit"
+          git push origin main > /dev/null 2>&1 || echo "No changes to commit"
 
       - name: Succesfully notification
         uses: appleboy/telegram-action@master
