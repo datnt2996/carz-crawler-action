@@ -16,8 +16,14 @@ jobs:
   crawler:
     strategy:
       matrix:
-        os: [ubuntu-latest, ubuntu-latest, ubuntu-latest, ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+        os:
+          [
+            { name: ubuntu-latest, chunk: 1 },
+            { name: ubuntu-latest, chunk: 2 },
+            { name: ubuntu-latest, chunk: 3 },
+            { name: ubuntu-latest, chunk: 4 },
+          ]
+    runs-on: ${{ matrix.os.name }}
     steps:
       - name: Clone repository
         uses: actions/checkout@v3
@@ -36,7 +42,7 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_CHANNEL }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: "🚀 - Start crawling data Khmer24..."
+          message: "🚀 - Start crawling data Khmer24... ${{ matrix.os.chunk }}"
 
       # - name: Start NestJS application
       #   run: |
