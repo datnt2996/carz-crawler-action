@@ -71,8 +71,9 @@ jobs:
           git branch -d feat/data-crawler-${{ matrix.os.chunk }} || echo "Error"
           git checkout -b feat/data-crawler-${{ matrix.os.chunk }}
           git add ./${{ matrix.os.chunk }}.cars-data-crawler.csv
-          git commit -m "✅ Save crawler data."
+          git commit -m "✅ - Save crawler data."
           git push --set-upstream origin feat/data-crawler-${{ matrix.os.chunk }} || echo "Error"
+          cat ./${{ matrix.os.chunk }}.cars-data-crawler.csv
 
       - name: Failure notification
         if: ${{ failure() }}
