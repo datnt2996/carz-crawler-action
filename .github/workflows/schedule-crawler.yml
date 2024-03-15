@@ -76,13 +76,13 @@ jobs:
           # git commit -m "save crawl data"
           # git push --set-upstream origin feat/data-crawler-${{ matrix.os.chunk }}
 
-      - name: Failure notification
-        if: ${{ failure() }}
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_CHANNEL }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: "💣 - Failure crawling data Khmer24(${{ matrix.os.chunk }})."
+      # - name: Failure notification
+      #   if: ${{ failure() }}
+      #   uses: appleboy/telegram-action@master
+      #   with:
+      #     to: ${{ secrets.TELEGRAM_CHANNEL }}
+      #     token: ${{ secrets.TELEGRAM_TOKEN }}
+      #     message: "💣 - Failure crawling data Khmer24(${{ matrix.os.chunk }})."
   finish:
     needs: [crawler]
     name: Send Notification Result
