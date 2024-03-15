@@ -24,6 +24,7 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: "🚀 - Start crawling data Khmer24..."
   crawler:
+    needs: [pre-deployment]
     continue-on-error: true
     strategy:
       fail-fast: true
@@ -82,7 +83,8 @@ jobs:
           to: ${{ secrets.TELEGRAM_CHANNEL }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: "💣 - Failure crawling data Khmer24(${{ matrix.os.chunk }})."
-  sendNotifcationResult:
+  finish:
+    needs: [crawler]
     name: Send Notification Result
     runs-on: ubuntu-latest
     steps:
