@@ -63,13 +63,12 @@ jobs:
           node crawler${{ matrix.os.chunk }}
 
       - name: Push changes
-
         run: |
           du -h ./${{ matrix.os.chunk }}.cars-data-crawler.csv
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          git remote
           git push origin --delete feat/data-crawler-${{ matrix.os.chunk }} || echo "Error"
+          git branch -d feat/data-crawler-${{ matrix.os.chunk }} || echo "Error"
           git checkout -b feat/data-crawler-${{ matrix.os.chunk }}
           git add ./${{ matrix.os.chunk }}.cars-data-crawler.csv
           git commit -m "save crawl data"
