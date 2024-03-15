@@ -20,6 +20,7 @@ jobs:
       matrix:
         os:
           [
+            { name: ubuntu-latest, chunk: 0 },
             { name: ubuntu-latest, chunk: 1 },
             { name: ubuntu-latest, chunk: 2 },
             { name: ubuntu-latest, chunk: 3 },
@@ -29,15 +30,6 @@ jobs:
             { name: ubuntu-latest, chunk: 7 },
             { name: ubuntu-latest, chunk: 8 },
             { name: ubuntu-latest, chunk: 9 },
-            { name: ubuntu-latest, chunk: 10 },
-            { name: ubuntu-latest, chunk: 11 },
-            { name: ubuntu-latest, chunk: 12 },
-            { name: ubuntu-latest, chunk: 13 },
-            { name: ubuntu-latest, chunk: 14 },
-            { name: ubuntu-latest, chunk: 15 },
-            { name: ubuntu-latest, chunk: 16 },
-            { name: ubuntu-latest, chunk: 17 },
-            { name: ubuntu-latest, chunk: 18 },
           ]
     runs-on: ${{ matrix.os.name }}
     steps:
@@ -71,9 +63,9 @@ jobs:
           du -h ./${{ matrix.os.chunk }}.cars-data-crawler.csv
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
+          git pull origin main > /dev/null 2>&1
           git add ./${{ matrix.os.chunk }}.cars-data-crawler.csv
           git commit -m "save crawl data" > /dev/null 2>&1 || echo "No changes to commit"
-          git pull origin main > /dev/null 2>&1
           git push origin main > /dev/null 2>&1 || echo "No changes to commit"
 
       - name: Succesfully notification
