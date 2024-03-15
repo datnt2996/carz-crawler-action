@@ -66,14 +66,14 @@ jobs:
 
         run: |
           du -h ./${{ matrix.os.chunk }}.cars-data-crawler.csv
-          git branch -d feat/data-crawler-${{ matrix.os.chunk }} > /dev/null 
-          git push origin --delete feat/data-crawler-${{ matrix.os.chunk }} > /dev/null 
+          git branch -d feat/data-crawler-${{ matrix.os.chunk }} > /dev/null  2>&1 
+          git push origin --delete feat/data-crawler-${{ matrix.os.chunk }} > /dev/null 2>&1 
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git brand -d feat/data-crawler-${{ matrix.os.chunk }}
           git checkout -b feat/data-crawler-${{ matrix.os.chunk }}
           git add ./${{ matrix.os.chunk }}.cars-data-crawler.csv
-          git commit -m "save crawl data" > /dev/null || echo "No changes to commit"
+          git commit -m "save crawl data" > /dev/null 2>&1 || echo "No changes to commit"
           git push --set-upstream origin feat/data-crawler-${{ matrix.os.chunk }}
 
       - name: Failure notification
