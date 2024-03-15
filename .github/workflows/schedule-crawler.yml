@@ -14,7 +14,7 @@ permissions:
   actions: write
 jobs:
   crawler:
-    runs-on: [self-hosted, linux, beaver]
+    runs-on: ubuntu-latest
     steps:
       - name: Clone repository
         uses: actions/checkout@v3
