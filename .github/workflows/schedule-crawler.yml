@@ -14,7 +14,9 @@ permissions:
   actions: write
 jobs:
   crawler:
+    continue-on-error: true
     strategy:
+      fail-fast: true
       matrix:
         os:
           [
