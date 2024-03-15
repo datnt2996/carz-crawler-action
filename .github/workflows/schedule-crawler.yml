@@ -14,7 +14,7 @@ permissions:
   actions: write
 jobs:
   crawler:
-    runs-on: macos-latest
+    runs-on: [self-hosted, linux, beaver]
     steps:
       - name: Clone repository
         uses: actions/checkout@v3
@@ -25,42 +25,39 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 18.12.0
       - name: Install dependencies
         run: npm install --force
-      # - name: Init env
-      #   env:
-      #     PORT: ${{vars.PORT}}
-      #     MONGODB_URL: ${{vars.MONGODB_URL}}
-      #     MONGO_DB_NAME: ${{vars.MONGO_DB_NAME}}
-      #     RABBITMQ_CRAWLER_QUEUE: ${{vars.RABBITMQ_CRAWLER_QUEUE}}
-      #     RABBITMQ_URL: ${{vars.RABBITMQ_URL}}
-      #   run: |
-      #     echo "PORT=$PORT" >> .env
-      #     echo "MONGODB_URL=$MONGODB_URL" >> .env
-      #     echo "MONGO_DB_NAME=$MONGO_DB_NAME" >> .env
-      #     echo "RABBITMQ_CRAWLER_QUEUE=$RABBITMQ_CRAWLER_QUEUE" >> .env
-      #     echo "RABBITMQ_URL=$RABBITMQ_URL" >> .env
-      # - name: Build NestJS application
-      #   run: npm run build
+      - name: Notification to telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHANNEL }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: "🚀 - Start crawling data Khmer24..."
+
       - name: Start NestJS application
         run: |
+          node -v
           node crawl.js
-      # - name: Wait for npm start to start
-      #   run: sleep 10
-      # - name: Run app and crawl data
-      #   env:
-      #     PORT: ${{vars.PORT}}
-      #   run: |
-      #     curl -X GET http://localhost:$PORT/api/write-to-csv
-
       - name: Push changes
         run: |
           du -h ./cars-data-crawler.csv
-          cat ./cars-data-crawler.csv
-          curl https://www.khmer24.com/en/c-cars-and-vehicles?per_page=1
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git add ./cars-data-crawler.csv
           git commit -m "save crawl data"
           git push origin main
+      - name: Failure notification
+        if: ${{ failure() }}
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHANNEL }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: "💣 - Failure crawling data Khmer24."
+
+      - name: Succesfully notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHANNEL }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: "✅ - Success crawling data Khmer24."
