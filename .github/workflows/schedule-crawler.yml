@@ -13,6 +13,16 @@ permissions:
   contents: write
   actions: write
 jobs:
+  pre-deployment:
+    name: Pre Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notification to telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHANNEL }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: "🚀 - Start crawling data Khmer24..."
   crawler:
     continue-on-error: true
     strategy:
@@ -45,13 +55,6 @@ jobs:
           node-version: 18.12.0
       - name: Install dependencies
         run: npm install --force
-      - name: Notification to telegram
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_CHANNEL }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: "🚀 - Start crawling data Khmer24(${{ matrix.os.chunk }})..."
-
       - name: Start NestJS application
         run: |
           node -v
@@ -59,21 +62,19 @@ jobs:
           node crawler${{ matrix.os.chunk }}
 
       - name: Push changes
+
         run: |
           du -h ./${{ matrix.os.chunk }}.cars-data-crawler.csv
+          git branch -d feat/data-crawler-${{ matrix.os.chunk }}
+          git push origin --delete feat/data-crawler-${{ matrix.os.chunk }}
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          git pull origin main > /dev/null 2>&1
+          git brand -d feat/data-crawler-${{ matrix.os.chunk }}
+          git checkout -b feat/data-crawler-${{ matrix.os.chunk }}
           git add ./${{ matrix.os.chunk }}.cars-data-crawler.csv
           git commit -m "save crawl data" > /dev/null 2>&1 || echo "No changes to commit"
-          git push origin main > /dev/null 2>&1 || echo "No changes to commit"
+          git push --set-upstream origin feat/data-crawler-${{ matrix.os.chunk }}
 
-      - name: Succesfully notification
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_CHANNEL }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: "✅ - Success crawling data Khmer24(${{ matrix.os.chunk }}). "
       - name: Failure notification
         if: ${{ failure() }}
         uses: appleboy/telegram-action@master
@@ -81,3 +82,13 @@ jobs:
           to: ${{ secrets.TELEGRAM_CHANNEL }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: "💣 - Failure crawling data Khmer24(${{ matrix.os.chunk }})."
+  sendNotifcationResult:
+    name: Send Notification Result
+    runs-on: ubuntu-latest
+    steps:
+      - name: Succesfully notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHANNEL }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: "✅ - Success crawling data Khmer24(${{ matrix.os.chunk }}). "
