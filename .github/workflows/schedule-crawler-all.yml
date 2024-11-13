@@ -47,14 +47,12 @@ jobs:
           node -v
           echo "const crawler = require('./rawl-all-links'); crawler.scrapeWithScroll();" > crawlerAll.js
           node crawlerAll.js
-      - name: Switch git user to github action.
+     
+      - name: Push changes
         working-directory: nestjs-carz-crawler-action
         run: |
-          git config --global user.name "GitHub Actions"
+        git config --global user.name "GitHub Actions"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Push changes
-        run: |
           git add .
           git commit -m "✅ - Save crawler data."
           git push
