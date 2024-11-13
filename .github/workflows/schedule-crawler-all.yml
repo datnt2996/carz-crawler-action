@@ -49,10 +49,11 @@ jobs:
           node crawlerAll.js
 
       - name: Push changes
-        working-directory: nestjs-carz-crawler-action
+        working-directory: carz-crawler-action
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp nestjs-carz-crawler/output.txt carz-crawler-action/
           git add ./output.txt
           git commit -m "✅ - Save crawler data."
           git push
