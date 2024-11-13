@@ -1,0 +1,77 @@
+name: Project Carz Schedule Crawler data
+on:
+  # schedule:
+  #   - cron: 0 0 * * 6 # Runs at 12 AM (midnight) every Saturday
+  # - cron: '* * * * *' # Runs every minute
+
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Fill reason here!!!!!!"
+        required: false
+permissions:
+  contents: write
+  actions: write
+jobs:
+  # pre-deployment:
+  #   name: Pre Deployment
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Notification to telegram
+  #       uses: appleboy/telegram-action@master
+  #       with:
+  #         to: ${{ secrets.TELEGRAM_CHANNEL }}
+  #         token: ${{ secrets.TELEGRAM_TOKEN }}
+  #         message: "🚀 - Start crawling data Khmer24..."
+  crawler:
+    # needs: [pre-deployment]
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+        with:
+          repository: "LibertyCarz/nestjs-carz-crawler"
+          token: ${{ secrets.GH_TOKEN }}
+          ref: "main"
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.12.0
+      - name: Install dependencies
+        run: npm install --force
+      - name: Start NestJS application
+        run: |
+          node -v
+          echo "const crawler = require('./rawl-all-links'); crawler.scrapeWithScroll();" > crawlerAll.js
+          node crawlerAll.js
+
+      # - name: Push changes
+      #   run: |
+      #     du -h ./${{ matrix.os.chunk }}.cars-data-crawler.csv
+      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      #     git config --global user.name "github-actions[bot]"
+      #     git push origin --delete feat/data-crawler-${{ matrix.os.chunk }} || echo "Error"
+      #     git branch -d feat/data-crawler-${{ matrix.os.chunk }} || echo "Error"
+      #     git checkout -b feat/data-crawler-${{ matrix.os.chunk }}
+      #     git add ./${{ matrix.os.chunk }}.cars-data-crawler.csv
+      #     git commit -m "✅ - Save crawler data."
+      #     git push --set-upstream origin feat/data-crawler-${{ matrix.os.chunk }} || echo "Error"
+      #     cat ./${{ matrix.os.chunk }}.cars-data-crawler.csv
+
+      # - name: Failure notification
+      #   if: ${{ failure() }}
+      #   uses: appleboy/telegram-action@master
+      #   with:
+      #     to: ${{ secrets.TELEGRAM_CHANNEL }}
+      #     token: ${{ secrets.TELEGRAM_TOKEN }}
+      #     message: "💣 - Failure crawling data Khmer24(${{ matrix.os.chunk }})."
+  # finish:
+  #   needs: [crawler]
+  #   name: Send Notification Result
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Succesfully notification
+  #       uses: appleboy/telegram-action@master
+  #       with:
+  #         to: ${{ secrets.TELEGRAM_CHANNEL }}
+  #         token: ${{ secrets.TELEGRAM_TOKEN }}
+  #         message: "✅ - Success crawling data Khmer24."
