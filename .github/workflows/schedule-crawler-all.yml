@@ -13,6 +13,7 @@ permissions:
   contents: write
   actions: write
 jobs:
+  runs-on: ubuntu-latest
   # pre-deployment:
   #   name: Pre Deployment
   #   runs-on: ubuntu-latest
