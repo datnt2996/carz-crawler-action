@@ -45,11 +45,11 @@ jobs:
       - name: Start NestJS application
         run: |
           node -v
-          echo "const crawler = require('./rawl-all-links'); crawler.scrapeWithScroll(10);" > crawlerAll.js
+          echo "const crawler = require('./rawl-all-links'); crawler.scrapeWithScroll(5);" > crawlerAll.js
           node crawlerAll.js
 
       - name: Push changes
-        working-directory: carz-crawler-action
+        # working-directory: carz-crawler-action
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
