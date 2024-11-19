@@ -45,7 +45,7 @@ jobs:
       - name: Start NestJS application
         run: |
           node -v
-          echo "const crawler = require('./rawl-all-links'); crawler.scrapeWithScroll(5);" > crawlerAll.js
+          echo "const crawler = require('./rawl-all-links'); crawler.scrapeWithScroll(200);" > crawlerAll.js
           node crawlerAll.js
 
       - name: Push changes
