@@ -56,7 +56,7 @@ jobs:
           # cp nestjs-carz-crawler/output.txt carz-crawler-action/
           git add .
           git commit -m "✅ - Save crawler data."
-          git push
+          git push --force
 
       # - name: Push changes
       #   run: |
