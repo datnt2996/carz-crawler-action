@@ -65,9 +65,13 @@ const getPosts = async (offset) => {
 const TIME_ACTIONS = 500;
 const PAGE_SIZE = 30;
 const main = async (timeActions = TIME_ACTIONS) => {
-  for (let i = 0; i <= timeActions; i++) {
+  for (let i = 0; i < timeActions; i++) {
     const data = await getPosts(i * PAGE_SIZE);
-    console.log({data})
+    const urls = [];
+    data.forEach((item) => {
+      item.type === 'post' && urls.push(item.link);
+    });
+    console.log({ urls });
     // writeToFile(data);
   }
 };
