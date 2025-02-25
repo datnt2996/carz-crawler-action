@@ -10,7 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
        - name: Setup Node.js environment
-         uses: actions/setup-node@v18.12.0
+         uses: actions/setup-node@v4
+         with:
+          node-version: 18.12
        - name: Checkout code
          uses: actions/checkout@v3
        - name: Run Test
