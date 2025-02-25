@@ -43,7 +43,7 @@ const getPostDetail = async (id) => {
 const getPosts = async (offset) => {
   // eslint-disable-next-line
   const response = await fetch(
-    `https://api-posts.khmer24.com/feed?fields=thumbnails,thumbnail,location,photos,user,store,renew_date,is_like,is_saved,category,link,object_highlight_specs,condition&functions=save,chat,like,apply_job,shipping,banner,highlight_ads%5Bobject_highlight_specs%5D&filter_version=4&meta=true&offset=${offset}&category=cars-and-vehicles&sortby&date&max_ad_price&min_ad_price&province&district&commune`,
+    `https://api-posts.khmer24.com/feed?fields=location,phone,photos,status,total_like,store,user,photo,category,description,is_like,posted_date,renew_date,object_specs,is_saved,is_job_applied,link,thumbnail,thumbnails,total_comment&functions=save,chat,like,apply_job,shipping,banner,highlight_ads%5Bobject_highlight_specs%5D&filter_version=4&meta=true&offset=${offset}&category=cars-and-vehicles&sortby&date&max_ad_price&min_ad_price&province&district&commune`,
     requestOptions,
   )
     .then((response) => {
@@ -68,10 +68,17 @@ const main = async (timeActions = TIME_ACTIONS) => {
   for (let i = 0; i < timeActions; i++) {
     const data = await getPosts(i * PAGE_SIZE);
     const urls = [];
+    const result = []
     data.forEach((item) => {
-      item.type === 'post' && urls.push(item.data.link);
+      if(item.type === 'post') {
+        urls.push(item.data.link);
+        result.push(item.data);
+      }
     });
+    
     console.log({ urls });
+    console.log({ data: data[0] });
+    console.log({ data: data[1] });
     // writeToFile(data);
   }
 };
