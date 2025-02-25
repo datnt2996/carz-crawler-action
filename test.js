@@ -69,7 +69,7 @@ const main = async (timeActions = TIME_ACTIONS) => {
     const data = await getPosts(i * PAGE_SIZE);
     const urls = [];
     data.forEach((item) => {
-      item.type === 'post' && urls.push(item.link);
+      item.type === 'post' && urls.push(item.data.link);
     });
     console.log({ urls });
     // writeToFile(data);
