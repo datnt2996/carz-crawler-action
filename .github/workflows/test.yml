@@ -1,0 +1,17 @@
+name: Project Carz  Schedule Save Crawler data
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Fill reason here!!!!!!'
+        required: false
+jobs:
+  run:
+    runs-on: ubuntu-lastest
+    steps:
+       - name: Setup Node.js environment
+         uses: actions/setup-node@v18.12.0
+       - name: Checkout code
+         uses: actions/checkout@v3
+       - name: Run Test
+         run: node test.js
