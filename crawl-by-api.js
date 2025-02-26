@@ -1,6 +1,8 @@
 // eslint-disable-next-line
 const { API_OPTIONS, FILE_NAME } = require('./crawl-urls-by-api');
 // eslint-disable-next-line
+const fs = require('fs').promises;
+
 const SIZE_PER_PAGE = 500;
 const getPostDetail = async (id) => {
   // eslint-disable-next-line
