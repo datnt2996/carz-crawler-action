@@ -4,6 +4,7 @@ const { API_OPTIONS, FILE_NAME } = require('./crawl-urls-by-api');
 const fs = require('fs').promises;
 
 const SIZE_PER_PAGE = 500;
+const FILE_OUTPUT_NAME = 'cars-data-crawler.csv';
 const getPostDetail = async (id) => {
   // eslint-disable-next-line
   const response = await fetch(
@@ -32,8 +33,9 @@ const crawlData = async (package = 0) => {
     const end =
       start + SIZE_PER_PAGE >= ids.length ? ids.length : start + SIZE_PER_PAGE;
     const cars = [];
+    await writeHeaderToCSV(package);
 
-    for (let i = start; i <= end; i++) {
+    for (let i = start; i < end; i++) {
       const id = ids[i];
       const data = await getPostDetail(id);
       if (data) {
@@ -83,6 +85,8 @@ class CarGeneral {
     const categoryKh24 = {
       'cars for sale': 'sale',
       'vehicles for rent': 'rent',
+      'Cars for Sale': 'sale',
+      'Vehicles for Rent': 'rent',
     };
     return categoryKh24[category?.trim?.()] || null;
   }
@@ -128,11 +132,48 @@ async function writeCarsToCSV(cars, num = 0) {
   cars.forEach((car) => {
     csvData += getRow(car);
   });
-  await fs.writeFile(`${num}_data.csv`, csvData, { flag: 'a' }, (err) => {
+  await fs.writeFile(
+    `${num}.${FILE_OUTPUT_NAME}`,
+    csvData,
+    { flag: 'a' },
+    (err) => {
+      if (err) {
+        console.error('Error writing to CSV file:', err);
+      } else {
+        console.log('Cars appended to CSV file successfully.');
+      }
+    },
+  );
+}
+
+async function writeHeaderToCSV(num = 0) {
+  try {
+    await fs.unlinkSync(FILE_NAME);
+  } catch (error) {}
+  const headers = [
+    'carId',
+    'price',
+    'category',
+    'type',
+    'location',
+    'posted',
+    'brand',
+    'model',
+    'year',
+    'taxType',
+    'condition',
+    'bodyType',
+    'fuel',
+    'transmission',
+    'color',
+    'source',
+  ];
+  const csvData = headers.join(',') + '\n';
+  await (0, fs.writeFile)(`${num}.${FILE_NAME}`, csvData, (err) => {
     if (err) {
       console.error('Error writing to CSV file:', err);
     } else {
-      console.log('Cars appended to CSV file successfully.');
+      console.log('CSV file header written successfully.');
     }
   });
 }
