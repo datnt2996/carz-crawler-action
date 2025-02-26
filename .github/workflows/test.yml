@@ -21,7 +21,7 @@ jobs:
           node crawl-urls.js
        - name: Run Crawl Details
          run: |
-           npm init
+           # npm init
            npm install fs
            echo "const {crawlData} = require('./crawl-by-api'); crawlData(0);" > main.js
            node main.js
