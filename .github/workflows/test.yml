@@ -17,7 +17,7 @@ jobs:
          uses: actions/checkout@v3
        - name: Run Crawl All Urls
          run: |
-          echo "const {getAllUrls} = require('./crawl-urls-by-api'); getAllUrls(2);" > crawl-urls.js
+          echo "const {getAllUrls} = require('./crawl-urls-by-api'); getAllUrls(15);" > crawl-urls.js
           node crawl-urls.js
        - name: Run Crawl Details
          run: |
