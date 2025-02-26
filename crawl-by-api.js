@@ -29,6 +29,7 @@ const crawlData = async (package = 0) => {
     for (let i = start; i < end; i++) {
       const id = ids[i];
       const data = await getPostDetail(id);
+      console.log({data});
       cars.push(new CarGeneral().deserializeByAPI(data));
     }
     await writeCarsToCSV(cars, package);
@@ -123,16 +124,16 @@ class CarGeneral {
     this.location = data?.location?.en_name;
     this.posted = data?.posted;
     this.condition = data?.condition?.value;
-    this.brand = data?.object_specs?.['car-brand'].value;
-    this.model = data?.object_specs?.['car-model'].value;
-    this.year = data?.object_specs?.['car-year'].value;
-    this.taxType = data?.object_specs?.['tax-type'].value;
-    this.bodyType = data?.object_specs?.['body_type'].value;
-    this.fuel = data?.object_specs?.['fuel'].value;
-    this.transmission = data?.object_specs?.['transmission'].value;
-    this.color = data?.object_specs?.['color'].value;
+    this.brand = data?.object_specs?.['car-brand']?.value;
+    this.model = data?.object_specs?.['car-model']?.value;
+    this.year = data?.object_specs?.['car-year']?.value;
+    this.taxType = data?.object_specs?.['tax-type']?.value;
+    this.bodyType = data?.object_specs?.['body_type']?.value;
+    this.fuel = data?.object_specs?.['fuel']?.value;
+    this.transmission = data?.object_specs?.['transmission']?.value;
+    this.color = data?.object_specs?.['color']?.value;
     this.source = 'kh24';
-    this.year = data?.object_specs?.['car-year'].value;
+    this.year = data?.object_specs?.['car-year']?.value;
     this.createdAt = data?.createdAt;
     this.updatedAt = data?.updatedAt;
     return this;
