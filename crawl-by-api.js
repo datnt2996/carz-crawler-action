@@ -9,12 +9,18 @@ const getPostDetail = async (id) => {
   const response = await fetch(
     `https://api-posts.khmer24.com/feed/${id}?lang=en&fields=location,phone,photos,status,total_like,store,user,photo,category,description,is_like,posted_date,renew_date,object_specs,is_saved,is_job_applied,link,thumbnail,thumbnails,total_comment&functions=save,chat,like,apply_job,shipping,comment&meta=true`,
     API_OPTIONS,
-  ).then((response) => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
-  });
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(
+          `HTTP error! status: ${response.status}, car id: ${id}`,
+        );
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.log('ERROR IN CRAWL DATA', error?.message);
+    });
   return response?.data;
 };
 
@@ -29,9 +35,11 @@ const crawlData = async (package = 0) => {
     for (let i = start; i < end; i++) {
       const id = ids[i];
       const data = await getPostDetail(id);
-      const car = new CarGeneral().deserializeByAPI(data);
-      console.log({car});
-      cars.push(car);
+      if (data) {
+        const car = new CarGeneral().deserializeByAPI(data);
+        console.log('car', car.carId, car.price);
+        cars.push(car);
+      }
     }
     await writeCarsToCSV(cars, package);
   } catch (error) {
@@ -88,28 +96,6 @@ class CarGeneral {
     }
   }
 
-  deserializeKh24(data) {
-    this._id = data?._id;
-    this.carId = data?.adId || data?.carId;
-    this.price = data?.price;
-    this.category = data?.category;
-    this.type = this.getTypeByCategory(data?.category);
-    this.location = data?.locations;
-    this.posted = data?.posted;
-    this.brand = data?.carMakes || data?.brand;
-    this.model = data?.carModel || data?.model;
-    this.year = data?.year;
-    this.taxType = data?.taxType;
-    this.condition = data?.condition;
-    this.bodyType = data?.bodyType;
-    this.fuel = data?.fuel;
-    this.transmission = data?.transmission;
-    this.color = data?.color;
-    this.source = data?.source || 'kh24';
-    this.createdAt = data?.createdAt;
-    this.updatedAt = data?.updatedAt;
-    return this;
-  }
   getTypeByCategory(category) {
     const categoryKh24 = {
       'cars for sale': 'sale',
@@ -117,6 +103,7 @@ class CarGeneral {
     };
     return categoryKh24[category?.trim?.()] || null;
   }
+
   deserializeByAPI(data) {
     this.carId = data?.id;
     this.price = Number(data?.price);
@@ -158,7 +145,6 @@ async function writeCarsToCSV(cars, num = 0) {
   cars.forEach((car) => {
     csvData += getRow(car);
   });
-
   await fs.writeFile(`${num}_data.csv`, csvData, { flag: 'a' }, (err) => {
     if (err) {
       console.error('Error writing to CSV file:', err);
