@@ -29,10 +29,11 @@ const crawlData = async (package = 0) => {
     const carIds = await fs.readFile(FILE_NAME, 'utf8');
     const ids = JSON.parse(carIds);
     const start = package * SIZE_PER_PAGE;
-    const end = start >= ids.length ? ids.length : start + SIZE_PER_PAGE;
+    const end =
+      start + SIZE_PER_PAGE >= ids.length ? ids.length : start + SIZE_PER_PAGE;
     const cars = [];
 
-    for (let i = start; i < end; i++) {
+    for (let i = start; i <= end; i++) {
       const id = ids[i];
       const data = await getPostDetail(id);
       if (data) {
@@ -74,25 +75,7 @@ class CarGeneral {
   updatedAt;
   constructor(data = {}) {
     if (data) {
-      this._id = data?._id;
-      this.carId = data?.carId;
-      this.price = data?.price;
-      this.type = data?.type;
-      this.category = data?.category;
-      this.location = data?.location;
-      this.posted = data?.posted;
-      this.brand = data?.brand;
-      this.model = data?.model;
-      this.year = data?.year;
-      this.taxType = data?.taxType;
-      this.condition = data?.condition;
-      this.bodyType = data?.bodyType;
-      this.fuel = data?.fuel;
-      this.transmission = data?.transmission;
-      this.color = data?.color;
-      this.source = data?.source;
-      this.createdAt = data?.createdAt;
-      this.updatedAt = data?.updatedAt;
+      Object.assign(this, data);
     }
   }
 
