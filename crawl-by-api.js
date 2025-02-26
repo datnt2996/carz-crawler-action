@@ -155,7 +155,7 @@ async function writeCarsToCSV(cars, num = 0) {
     csvData += getRow(car);
   });
 
-  await fs.writeFile(`${num}.${FILE_NAME}`, csvData, { flag: 'a' }, (err) => {
+  await fs.writeFile(`${num}_data.csv`, csvData, { flag: 'a' }, (err) => {
     if (err) {
       console.error('Error writing to CSV file:', err);
     } else {
