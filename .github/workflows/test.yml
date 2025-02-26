@@ -15,5 +15,16 @@ jobs:
           node-version: 18.12
        - name: Checkout code
          uses: actions/checkout@v3
-       - name: Run Test
-         run: node test.js
+       - name: Run Crawl All Urls
+         run: |
+          echo "const {getAllUrls} = require('./crawl-urls-by-api'); getAllUrls(2);" > crawl-urls.js
+          node crawl-urls.js
+       - name: Run Crawl Details
+         run: |
+           echo "const {crawlData} = require('./crawl-by-api'); crawlData(0);" > main.js
+           node main.js
+       - name: Upload U
+         uses: actions/upload-artifact@v4
+         with:
+          name: output
+          path: ./0_data.csv
