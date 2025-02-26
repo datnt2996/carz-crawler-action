@@ -21,9 +21,11 @@ jobs:
           node crawl-urls.js
        - name: Run Crawl Details
          run: |
+           npm init
+           npm install fs
            echo "const {crawlData} = require('./crawl-by-api'); crawlData(0);" > main.js
            node main.js
-       - name: Upload U
+       - name: Upload Artifact
          uses: actions/upload-artifact@v4
          with:
           name: output
