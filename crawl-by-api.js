@@ -29,8 +29,9 @@ const crawlData = async (package = 0) => {
     for (let i = start; i < end; i++) {
       const id = ids[i];
       const data = await getPostDetail(id);
-      console.log({data});
-      cars.push(new CarGeneral().deserializeByAPI(data));
+      const car = new CarGeneral().deserializeByAPI(data);
+      console.log({car});
+      cars.push(car);
     }
     await writeCarsToCSV(cars, package);
   } catch (error) {
