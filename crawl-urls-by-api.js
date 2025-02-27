@@ -61,8 +61,8 @@ const getAllUrls = async (timeActions = TIME_ACTIONS) => {
     data.forEach((item) => {
       item?.type === 'post' && carIds.push(item?.data?.id);
     });
+    console.log(data?.[0]);
   }
-  console.log(data[0]);
   await writeToTxtFile(FILE_NAME, carIds);
   // await writeToTxtFile('output.txt', urls);
 };
