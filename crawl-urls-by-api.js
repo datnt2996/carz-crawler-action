@@ -32,7 +32,7 @@ const FILE_NAME = 'ids_output.txt';
 const getPosts = async (offset) => {
   // eslint-disable-next-line
   const response = await fetch(
-    `https://api-posts.khmer24.com/feed?fields=thumbnails,thumbnail,location,photos,user,store,renew_date,is_like,is_saved,category,link,object_highlight_specs,condition&functions=save,chat,like,apply_job,shipping,banner,highlight_ads%5Bobject_highlight_specs%5D&filter_version=4&meta=true&offset=${offset}&category=cars-and-vehicles&sortby&date&max_ad_price&min_ad_price&province&district&commune`,
+    `https://api-posts.khmer24.com/feed?fields=thumbnails,thumbnail,location,photos,user,store,renew_date,is_like,is_saved,category,link,object_highlight_specs,condition&functions=save,chat,like,apply_job,shipping,banner,highlight_ads%5Bobject_highlight_specs%5D&filter_version=4&meta=true&offset=${offset}&limit=100&category=cars-and-vehicles&sortby&date&max_ad_price&min_ad_price&province&district&commune`,
     API_OPTIONS,
   )
     .then((response) => {
@@ -52,7 +52,7 @@ const getPosts = async (offset) => {
 };
 
 const TIME_ACTIONS = 500;
-const PAGE_SIZE = 30;
+const PAGE_SIZE = 100;
 const getAllUrls = async (timeActions = TIME_ACTIONS) => {
   const carIds = [];
   // const urls = [];
