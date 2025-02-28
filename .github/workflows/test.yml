@@ -1,0 +1,32 @@
+name: RUN TEST...
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Fill reason here!!!!!!'
+        required: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+       - name: Setup Node.js environment
+         uses: actions/setup-node@v4
+         with:
+          node-version: 18.12
+       - name: Checkout code
+         uses: actions/checkout@v3
+       - name: Run Crawl All Urls
+         run: |
+          echo "const {getAllUrls} = require('./crawl-urls-by-api'); getAllUrls(5);" > crawl-urls.js
+          node crawl-urls.js
+       - name: Run Crawl Details
+         run: |
+           # npm init
+           # npm install fs
+           echo "const {crawlData} = require('./crawl-by-api'); crawlData(0);" > main.js
+           node main.js
+       - name: Upload Artifact
+         uses: actions/upload-artifact@v4
+         with:
+          name: output
+          path: ./0_data.csv
