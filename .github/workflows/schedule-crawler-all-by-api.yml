@@ -1,0 +1,72 @@
+name: Project Carz Schedule Crawler ALL URLS by API
+on:
+  # schedule:
+  #   - cron: 0 0 * * 6 # Runs at 12 AM (midnight) every Saturday
+  # - cron: '* * * * *' # Runs every minute
+
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Fill reason here!!!!!!"
+        required: false
+permissions:
+  contents: write
+  actions: write
+jobs:
+  pre-deployment:
+    name: Pre Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notification to telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHANNEL }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: "🚀 - Start crawling data All URLs by API..."
+  crawler:
+    name: Crawler All Links
+    runs-on: ubuntu-latest
+    needs: [pre-deployment]
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+        with:
+          repository: "LibertyCarz/nestjs-carz-crawler"
+          token: ${{ secrets.GH_TOKEN }}
+          ref: "main"
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.12.0
+      - name: Install dependencies
+        run: npm install --force
+
+      - name: clean file
+        run: rm -rf crawlerAll.js
+
+      - name: Start NestJS application
+        run: |
+          node -v
+          echo "const {getAllUrls} = require('./crawls/crawl-urls-by-api'); getAllUrls(120);" > crawl-urls.js
+          node crawl-urls.js
+      # - name: Calculate Matrix
+      #   run: |
+      #     echo "const {getAllUrls} = require('./crawls/crawl-urls-by-api'); getAllUrls();" > crawl-urls.js
+      #     node crawl-urls.js
+
+      - name: Push changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # cp nestjs-carz-crawler/ids_output.txt carz-crawler-action/
+          git add .
+          git commit -m "✅ - Save crawler data."
+          git push --force
+
+      - name: Failure notification
+        if: ${{ failure() }}
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHANNEL }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: "💣 - Failure crawling data All URLs by API."
